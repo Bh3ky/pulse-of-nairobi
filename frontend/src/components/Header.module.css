@@ -1,0 +1,88 @@
+.headerWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* Allow clicks to pass through wrapper padding */
+}
+
+.headerCard {
+  pointer-events: auto; /* Re-enable clicks for the card */
+  width: 100%;
+  max-width: 1024px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.logoLink {
+  flex-shrink: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: 16px;
+  line-height: 0;
+}
+
+.logoWrapper {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.logoImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.navLink {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: #00ff88;
+}
+
+@media (max-width: 768px) {
+  .headerWrapper {
+    padding: 0.75rem 1rem;
+  }
+  
+  .headerCard {
+    height: 56px;
+    padding: 0 1.25rem;
+  }
+
+  .nav {
+    gap: 1rem;
+  }
+
+  .navLink {
+    font-size: 0.75rem;
+  }
+}

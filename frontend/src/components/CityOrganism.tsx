@@ -44,9 +44,10 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
     ];
 
     arteryPaths.forEach((path) => {
-      const strokeWidth = 2 + vitals.traffic * 8; // Constricts with stress
-      const opacity = 0.3 + vitals.traffic * 0.7;
-      const color = d3.interpolateReds(0.3 + vitals.traffic * 0.7);
+      const trafficValue = vitals.arteries?.value ?? 0;
+      const strokeWidth = 2 + trafficValue * 8; // Constricts with stress
+      const opacity = 0.3 + trafficValue * 0.7;
+      const color = d3.interpolateReds(0.3 + trafficValue * 0.7);
 
       arteryGroup
         .append('path')
@@ -60,7 +61,8 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
     });
 
     // Animate pulse based on traffic
-    const pulseDuration = Math.max(500, 2000 - vitals.traffic * 1500);
+    const trafficValue = vitals.arteries?.value ?? 0;
+    const pulseDuration = Math.max(500, 2000 - trafficValue * 1500);
     arteryGroup
       .selectAll('.artery')
       .transition()
@@ -93,9 +95,10 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
     // Two expanding/contracting shapes
     const lungGroup = organism.append('g').attr('class', 'lungs');
     
-    const lungScale = 1 - vitals.airQuality * 0.4; // Shrinks with poor air quality
-    const lungOpacity = 0.2 + vitals.airQuality * 0.5;
-    const lungColor = d3.interpolateBlues(0.4 + vitals.airQuality * 0.6);
+    const airQualityValue = vitals.lungs?.value ?? 0;
+    const lungScale = 1 - airQualityValue * 0.4; // Shrinks with poor air quality
+    const lungOpacity = 0.2 + airQualityValue * 0.5;
+    const lungColor = d3.interpolateBlues(0.4 + airQualityValue * 0.6);
 
     // Left lung
     lungGroup
@@ -120,7 +123,7 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
       .attr('class', 'lung-right');
 
     // Breathing animation
-    const breathDuration = Math.max(1000, 3000 - vitals.airQuality * 1500);
+    const breathDuration = Math.max(1000, 3000 - airQualityValue * 1500);
     lungGroup
       .selectAll('ellipse')
       .transition()
@@ -158,8 +161,9 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
       y: centerY + (Math.random() - 0.5) * 300,
     }));
 
-    const neuralBrightness = 1 - vitals.power * 0.7; // Dims with power stress
-    const neuralColor = d3.interpolateYlOrRd(vitals.power);
+    const powerValue = vitals.neural?.value ?? 0;
+    const neuralBrightness = 1 - powerValue * 0.7; // Dims with power stress
+    const neuralColor = d3.interpolateYlOrRd(powerValue);
 
     neuralPoints.forEach((point, i) => {
       neuralGroup
@@ -189,7 +193,8 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
     });
 
     // Flicker effect
-    const flickerInterval = Math.max(100, 500 - vitals.power * 400);
+    const powerValueForFlicker = vitals.neural?.value ?? 0;
+    const flickerInterval = Math.max(100, 500 - powerValueForFlicker * 400);
     neuralGroup
       .selectAll('.neural-node')
       .transition()
@@ -209,9 +214,10 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
     // Particles moving around the organism
     const immuneGroup = organism.append('g').attr('class', 'immune');
     
-    const particleCount = Math.floor(10 + vitals.emergency * 30);
-    const particleSpeed = 1 - vitals.emergency * 0.7; // Slows with stress
-    const immuneColor = d3.interpolateGreens(0.5 - vitals.emergency * 0.5);
+    const emergencyValue = vitals.immune?.value ?? 0;
+    const particleCount = Math.floor(10 + emergencyValue * 30);
+    const particleSpeed = 1 - emergencyValue * 0.7; // Slows with stress
+    const immuneColor = d3.interpolateGreens(0.5 - emergencyValue * 0.5);
 
     d3.range(particleCount).forEach((_, i) => {
       const angle = (i / particleCount) * Math.PI * 2;
@@ -223,7 +229,7 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
         .append('circle')
         .attr('cx', startX)
         .attr('cy', startY)
-        .attr('r', 2 + vitals.emergency * 3)
+        .attr('r', 2 + emergencyValue * 3)
         .attr('fill', immuneColor)
         .attr('opacity', 0.6)
         .attr('class', 'immune-particle')
@@ -232,12 +238,12 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
         .ease(d3.easeLinear)
         .attrTween('cx', function() {
           return function(t) {
-            return centerX + Math.cos(angle + t * Math.PI * 2) * radius;
+            return (centerX + Math.cos(angle + t * Math.PI * 2) * radius).toString();
           };
         })
         .attrTween('cy', function() {
           return function(t) {
-            return centerY + Math.sin(angle + t * Math.PI * 2) * radius;
+            return (centerY + Math.sin(angle + t * Math.PI * 2) * radius).toString();
           };
         })
         .on('end', function repeat() {
@@ -247,12 +253,12 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
             .ease(d3.easeLinear)
             .attrTween('cx', function() {
               return function(t) {
-                return centerX + Math.cos(angle + t * Math.PI * 2) * radius;
+                return (centerX + Math.cos(angle + t * Math.PI * 2) * radius).toString();
               };
             })
             .attrTween('cy', function() {
               return function(t) {
-                return centerY + Math.sin(angle + t * Math.PI * 2) * radius;
+                return (centerY + Math.sin(angle + t * Math.PI * 2) * radius).toString();
               };
             })
             .on('end', repeat);
@@ -282,23 +288,23 @@ export default function CityOrganism({ vitals }: CityOrganismProps) {
         </div>
         <div className={styles.statItem}>
           <span className={styles.label}>Traffic:</span>
-          <span className={styles.value}>{(vitals.traffic * 100).toFixed(0)}%</span>
+          <span className={styles.value}>{((vitals.arteries?.value ?? 0) * 100).toFixed(0)}%</span>
         </div>
         <div className={styles.statItem}>
           <span className={styles.label}>Air Quality:</span>
-          <span className={styles.value}>{(vitals.airQuality * 100).toFixed(0)}%</span>
+          <span className={styles.value}>{((vitals.lungs?.value ?? 0) * 100).toFixed(0)}%</span>
         </div>
         <div className={styles.statItem}>
           <span className={styles.label}>Power:</span>
-          <span className={styles.value}>{(vitals.power * 100).toFixed(0)}%</span>
+          <span className={styles.value}>{((vitals.neural?.value ?? 0) * 100).toFixed(0)}%</span>
         </div>
         <div className={styles.statItem}>
           <span className={styles.label}>Emergency:</span>
-          <span className={styles.value}>{(vitals.emergency * 100).toFixed(0)}%</span>
+          <span className={styles.value}>{((vitals.immune?.value ?? 0) * 100).toFixed(0)}%</span>
         </div>
         <div className={`${styles.statItem} ${styles.overall}`}>
           <span className={styles.label}>Overall Stress:</span>
-          <span className={styles.value}>{(vitals.overall * 100).toFixed(0)}%</span>
+          <span className={styles.value}>{((vitals.overall_stress ?? 0) * 100).toFixed(0)}%</span>
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ Serves city vitals data as physiological states for visualization.
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, List, Optional
+from datetime import datetime, timezone
+
 
 from data_proxies import get_city_vitals, get_all_vitals
 from models import (
@@ -196,11 +198,65 @@ async def health_check():
             "accumulated_stress": "/api/stress/accumulated?from_hour=0&to_hour=23",
             "current_stress": "/api/stress/current",
             "system_timeline": "/api/systems/{system}",
+            "canonical_hour": "/api/city/{hour}",
+            "full_timeline": "/api/city-timeline",
             "health": "/health"
         }
+    }
+
+
+@app.get("/api/city/{hour}")
+async def get_canonical_hour(hour: int) -> dict:
+    """
+    Get the canonical hour object with full city data.
+    
+    Returns:
+    - hour: Hour of day (0-23)
+    - timestamp: ISO 8601 timestamp
+    - vitals: mobility, energy, social, economic, environmental
+    - systems: transport, healthcare, internet, power
+    - stress_delta: Stress change for this hour
+    """
+    from data_proxies import get_hour_data
+    
+    if not 0 <= hour <= 23:
+        raise HTTPException(status_code=400, detail="Hour must be between 0 and 23")
+    
+    return get_hour_data(hour)
+
+
+@app.get("/api/city-timeline")
+async def get_full_timeline() -> dict:
+    """
+    Get the complete 24-hour timeline in canonical format.
+    This is the raw timeline that all other endpoints derive from.
+    
+    Perfect for D3.js visualization and Scrollama integration.
+    """
+    from data_proxies import get_timeline
+    
+    timeline = get_timeline()
+    
+    # Calculate daily summary
+    all_mobility = [h['vitals']['mobility'] for h in timeline]
+    all_social = [h['vitals']['social'] for h in timeline]
+    all_stress_deltas = [h['stress_delta'] for h in timeline]
+    
+    summary = {
+        "peak_stress_hour": all_stress_deltas.index(max(all_stress_deltas)),
+        "lowest_social_hour": all_social.index(min(all_social)),
+        "avg_mobility": round(sum(all_mobility) / 24, 3),
+        "total_stress_delta": round(sum(all_stress_deltas), 3)
+    }
+    
+    return {
+        "timeline": timeline,
+        "summary": summary,
+        "generated_at": datetime.now(timezone.utc).isoformat()
     }
 
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+

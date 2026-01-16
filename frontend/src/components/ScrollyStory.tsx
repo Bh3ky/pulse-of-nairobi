@@ -75,11 +75,12 @@ export default function ScrollyStory() {
   const [vitalsData, setVitalsData] = useState<CityVitals[]>([]);
   const [currentVitals, setCurrentVitals] = useState<CityVitals>({
     hour: 0,
-    traffic: 0.2,
-    airQuality: 0.1,
-    power: 0.15,
-    emergency: 0.2,
-    overall: 0.16,
+    arteries: { name: 'arteries', urban_source: 'traffic', value: 0.2, status: 'Healthy', description: '' },
+    lungs: { name: 'lungs', urban_source: 'airQuality', value: 0.1, status: 'Healthy', description: '' },
+    neural: { name: 'neural', urban_source: 'power', value: 0.15, status: 'Healthy', description: '' },
+    immune: { name: 'immune', urban_source: 'emergency', value: 0.2, status: 'Healthy', description: '' },
+    overall_stress: 0.16,
+    organism_status: 'Healthy'
   });
 
   // Fetch all vitals data on mount
@@ -102,8 +103,9 @@ export default function ScrollyStory() {
   const onStepEnter = ({ data }: { data: number }) => {
     setCurrentStep(data);
     const step = storySteps[data];
-    if (vitalsData.length > 0) {
-      const newVitals = vitalsData[step.hour];
+    if (vitalsData && vitalsData.length > 0) {
+      // Find vitals for the specific hour from the data array
+      const newVitals = vitalsData.find(v => v.hour === step.hour) || vitalsData[0];
       setCurrentVitals(newVitals);
     }
   };
