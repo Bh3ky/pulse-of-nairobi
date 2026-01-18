@@ -1,48 +1,21 @@
 // app/page.tsx
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import ScrollyStory from "@/components/ScrollyStory";
-import { Clock } from "@/components/Clock";
+import ScrollyStory from "@/components/scrollystory/ScrollyStory";
 import { OnboardingLoader } from "@/components/OnboardingLoader";
 import { useOncePerSession } from "./hooks/useOncePerSession";
 import { useParallax } from "./hooks/useParallax";
 import styles from "./page.module.css";
 
-interface ClockState {
-  start: number;
-  end: number;
-  progress: number;
-  quote?: string;
-}
 
 export default function Home() {
   const showOnboarding = useOncePerSession("nairobi-onboarding-v1");
   const [onboardingDone, setOnboardingDone] = useState(false);
   const parallaxRef = useParallax(0.4);
 
-  const [clockState, setClockState] = useState<ClockState>({
-    start: 6,
-    end: 10,
-    progress: 0,
-    quote: "The vibrant city awakens to a new day",
-  });
 
-  // ✅ STABLE + GUARDED CALLBACK
-  const handleClockUpdate = useCallback((data: ClockState) => {
-    setClockState((prev) => {
-      if (
-        prev.start === data.start &&
-        prev.end === data.end &&
-        prev.progress === data.progress &&
-        prev.quote === data.quote
-      ) {
-        return prev;
-      }
-      return data;
-    });
-  }, []);
 
   if (showOnboarding === null) {
     return null;
@@ -59,13 +32,6 @@ export default function Home() {
         />
       )}
 
-      <Clock
-        startHour={clockState.start}
-        endHour={clockState.end}
-        progress={clockState.progress}
-        quote={clockState.quote}
-      />
-
       <main
         className={styles.main}
         style={{
@@ -79,7 +45,7 @@ export default function Home() {
             className={styles.parallaxBg}
             style={{
               position: "absolute",
-              inset: "-10% 0",
+              inset: 0,
               zIndex: 0,
               willChange: "transform",
             }}
@@ -147,7 +113,12 @@ export default function Home() {
           </div>
         </div>
 
-        <ScrollyStory onClockUpdate={handleClockUpdate} />
+        <ScrollyStory />
+
+        {/* Your footer or other content */}
+        <footer className="bg-gray-900 text-white py-12 text-center">
+          <p>© 2026 City Pulse. All rights reserved.</p>
+        </footer>
       </main>
     </>
   );
