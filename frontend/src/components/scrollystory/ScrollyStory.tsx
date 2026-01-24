@@ -14,7 +14,7 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
     period: 'Morning',
     timeRange: '06:00 - 09:00',
     quote: 'The city awakens, a symphony of first light and fresh beginnings.',
-    imageUrl: '/morning.jpg', 
+    imageUrl: '/images/building3.jpg', 
     iconType: 'sunrise',
     vitals: {
       topLeft: [
@@ -31,15 +31,15 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 55, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-orange-50',
-    textColor: 'text-orange-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-amber-950/40',
+    textColor: 'text-amber-300'
   },
   {
     id: 'midmorning',
     period: 'Mid-Morning',
-    timeRange: '10:00 - 12:00',
+    timeRange: '09:00 - 10:00',
     quote: 'Productivity peaks as the urban rhythm finds its stride.',
-    imageUrl: '/building5.jpg',
+    imageUrl: '/images/building4.jpg',
     iconType: 'sun',
     vitals: {
       topLeft: [
@@ -56,15 +56,15 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 68, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-yellow-50',
-    textColor: 'text-yellow-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-orange-950/40',
+    textColor: 'text-orange-300'
   },
   {
     id: 'midday',
     period: 'Midday',
     timeRange: '12:00 - 14:00',
     quote: 'Under the zenith sun, the city pulses with maximum intensity.',
-    imageUrl: '/midday.jpg',
+    imageUrl: '/images/building5.jpg',
     iconType: 'sun-filled',
     vitals: {
       topLeft: [
@@ -81,15 +81,15 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 72, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-amber-50',
-    textColor: 'text-amber-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-red-950/40',
+    textColor: 'text-amber-300'
   },
   {
     id: 'afternoon',
     period: 'Afternoon',
     timeRange: '14:00 - 16:00',
     quote: 'The heat softens, yet the momentum continues unabated.',
-    imageUrl: '/afternoon.jpg',
+    imageUrl: '/images/building6.jpg',
     iconType: 'sun',
     vitals: {
       topLeft: [
@@ -106,15 +106,15 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 70, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-orange-50',
-    textColor: 'text-orange-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-orange-950/30',
+    textColor: 'text-orange-300'
   },
   {
     id: 'evening',
     period: 'Evening',
     timeRange: '17:00 - 20:00',
     quote: 'Golden hour bathes the city in warm light as people journey home.',
-    imageUrl: '/evening.jpg',
+    imageUrl: '/images/building7.jpg',
     iconType: 'sunset',
     vitals: {
       topLeft: [
@@ -131,15 +131,15 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 75, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-rose-50',
-    textColor: 'text-rose-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-rose-950/40',
+    textColor: 'text-rose-300'
   },
   {
     id: 'night',
     period: 'Night',
     timeRange: '21:00 - 05:00',
     quote: 'Darkness falls, yet the city never truly sleeps.',
-    imageUrl: '/night.jpg',
+    imageUrl: '/images/building8.jpg',
     iconType: 'moon',
     vitals: {
       topLeft: [
@@ -156,8 +156,8 @@ const PLACEHOLDER_TIME_SLOTS: TimeSlot[] = [
         { label: 'Noise Level', value: 48, unit: 'dB' } as CityVital
       ]
     },
-    backgroundColor: 'bg-indigo-50',
-    textColor: 'text-indigo-900'
+    backgroundColor: 'from-slate-950 via-slate-950 to-indigo-950/50',
+    textColor: 'text-indigo-300'
   }
 ];
 
@@ -204,13 +204,14 @@ export default function ScrollyStory() {
   };
 
   return (
-    <div className="relative bg-gray-50">
+    <div className="relative bg-slate-950 text-slate-100">
       {timeSlots.map((slot, index) => (
         <section 
           key={slot.id}
           ref={setRef(index)}
-          className='min-h-screen flex items-center'
+          className='relative min-h-screen py-24'
         >
+          <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${slot.backgroundColor}`} />
           <TimeSection 
             data={slot} 
             isActive={activeSection === index}
@@ -224,5 +225,3 @@ export default function ScrollyStory() {
     </div>
   );
 }
-
-

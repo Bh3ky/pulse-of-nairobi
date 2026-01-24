@@ -41,10 +41,10 @@ export interface TimeSectionProps {
 }
 
 export interface StickyClockProps {
-    period: string;
     timeRange: string;
-    iconType: IconType;
     textColor: string;
+    quote: string;
+    scrollProgress: import("framer-motion").MotionValue<number>;
     isActive: boolean;
 }
 
